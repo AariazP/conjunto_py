@@ -1,5 +1,63 @@
 import tkinter as tk
+
 from tkinter import messagebox
+
+
+
+
+def union( conjunto_a, set_b):
+    union = []
+    for elmnt in conjunto_a:
+        union.append(elmnt)
+        for union_elmnt in union[:-1]:
+            if union_elmnt == elmnt:
+                union.pop()
+                break
+
+    for elmnt in set_b: 
+        union.append(elmnt)
+        for union_elmnt in union[:-1]:
+            if union_elmnt == elmnt:
+                union.pop()
+                break
+
+    return union
+
+
+def interseccion( conjunto_a, set_b):
+    interseccion = []
+    for elmnt in conjunto_a:
+        if elmnt in set_b:
+            interseccion.append(elmnt)
+
+    return interseccion
+
+
+def subconjuntos( conjunto):
+    if len(conjunto) == 0:
+        return [[]]
+    sub = subconjuntos(conjunto[:-1])
+    return sub + [s + [conjunto[-1]] for s in sub]
+
+
+
+def disjuntos( conjunto_a, conjunto2):
+        for i in conjunto_a:
+            for j in conjunto2:
+                if i==j:
+                    return False
+        return True
+
+def diferencia( conjunto_a, conjunto_b ):
+    diferencia = []
+    for i in conjunto_a:
+        diferencia.append(i) 
+        for j in conjunto_b[:-1]:
+            if i == j:
+                diferencia.pop()
+                break
+
+    return diferencia
 
 class ConjuntosApp:
     def __init__(self, root):
@@ -7,8 +65,8 @@ class ConjuntosApp:
         self.root.title("Operaciones de Conjuntos")
 
         # Variables para almacenar los conjuntos
-        self.conjunto_a = set()
-        self.conjunto_b = set()
+        self.conjunto_a = []
+        self.conjunto_b = []
 
         # Etiqueta y entrada para el primer conjunto
         self.label_conjunto_a = tk.Label(root, text="Conjunto A:")
@@ -33,10 +91,11 @@ class ConjuntosApp:
         self.btn_calcular = tk.Button(root, text="Calcular", command=self.realizar_operacion)
         self.btn_calcular.grid(row=3, column=0, columnspan=2, pady=10)
 
+    
     def obtener_conjuntos_ingresados(self):
         try:
-            conjunto_a = set(map(int, self.entry_conjunto_a.get().split(',')))
-            conjunto_b = set(map(int, self.entry_conjunto_b.get().split(',')))
+            conjunto_a = list(map(int, self.entry_conjunto_a.get().split(',') ))
+            conjunto_b = list(map(int, self.entry_conjunto_b.get().split(',') ))
             return conjunto_a, conjunto_b
         except ValueError:
             messagebox.showerror("Error", "Ingrese conjuntos válidos (números separados por comas)")
@@ -49,13 +108,13 @@ class ConjuntosApp:
             operacion = self.operacion_var.get()
 
             if operacion == "Unión":
-                resultado = conjunto_a.union(conjunto_b)
+                resultado = union( conjunto_a, conjunto_b)
             elif operacion == "Intersección":
-                resultado = conjunto_a.intersection(conjunto_b)
+                resultado = interseccion( conjunto_a, conjunto_b)
             elif operacion == "Diferencia A-B":
-                resultado = conjunto_a.difference(conjunto_b)
+                resultado = diferencia( conjunto_a, conjunto_b)
             elif operacion == "Diferencia B-A":
-                resultado = conjunto_b.difference(conjunto_a)
+                resultado = diferencia(conjunto_a, conjunto_b)
 
             messagebox.showinfo("Resultado", f"Resultado de {operacion}: {resultado}")
 
@@ -63,4 +122,6 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = ConjuntosApp(root)
     root.mainloop()
+
+
 
