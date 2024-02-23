@@ -34,11 +34,16 @@ def interseccion( conjunto_a, set_b):
     return interseccion
 
 
-def subconjuntos( conjunto):
+def subconjunto( conjunto_a, conjunto_b ):
+    subconjuntos_a = subconjuntos(conjunto_a)
+    subconjuntos_b = subconjuntos(conjunto_b)
+    return "Los subconjuntos de A son: " + str(subconjuntos_a) + " y los subconjuntos de B son: " + str(subconjuntos_b)
+
+def subconjuntos(conjunto):
     if len(conjunto) == 0:
         return [[]]
     sub = subconjuntos(conjunto[:-1])
-    return sub + [s + [conjunto[-1]] for s in sub]
+    return sub + [s + [conjunto[-1]] for s in sub]   
 
 
 
@@ -46,8 +51,8 @@ def disjuntos( conjunto_a, conjunto2):
         for i in conjunto_a:
             for j in conjunto2:
                 if i==j:
-                    return False
-        return True
+                    return "Los conjuntos no son disjuntos"
+        return "Los conjuntos son disjuntos"
 
 def diferencia( conjunto_a, conjunto_b ):
     diferencia = []
@@ -60,9 +65,14 @@ def diferencia( conjunto_a, conjunto_b ):
 
     return diferencia
 
+def cardinalidad( conjunto_a, conjunto_b):
+    return "La cardinalidad del conjunto A es: " + str(len(conjunto_a)) + " y la cardinalidad del conjunto B es: " + str(len(conjunto_b)) 
+
 def dibujar_venn(conjunto_a, conjunto_b):
-    A = FiniteSet(1, 3, 5, 7, 9, 11, 13, 15, 17, 19)
-    B = FiniteSet(2, 3, 5, 7, 11, 13, 17, 19, 8)
+    #agregar los conjuntos a un objeto de tipo FiniteSet
+
+    A = FiniteSet(*conjunto_a)
+    B = FiniteSet(*conjunto_b)
 
     plt.figure(figsize=(6, 8))
     v = venn2(subsets=[A, B], set_labels=('A', 'B'))
@@ -95,7 +105,7 @@ class ConjuntosApp:
         self.entry_conjunto_b.grid(row=1, column=1, padx=5, pady=5)
 
         # Menú desplegable para seleccionar la operación
-        opciones_operaciones = ["Unión", "Intersección", "Diferencia A-B", "Diferencia B-A", "Ver como diagrama de venn"]
+        opciones_operaciones = ["Unión", "Intersección", "Diferencia A-B", "Diferencia B-A", "subconjuntos", "disjuntos", "cardinalidad" ,"Ver como diagrama de venn"]
         self.operacion_var = tk.StringVar(root)
         self.operacion_var.set(opciones_operaciones[0])  # Configurar la opción predeterminada
         self.menu_operacion = tk.OptionMenu(root, self.operacion_var, *opciones_operaciones)
@@ -130,6 +140,12 @@ class ConjuntosApp:
                 resultado = diferencia( conjunto_a, conjunto_b)
             elif operacion == "Diferencia B-A":
                 resultado = diferencia(conjunto_a, conjunto_b)
+            elif operacion == "subconjuntos":
+                resultado = subconjunto(conjunto_a, conjunto_b)
+            elif operacion == "disjuntos":
+                resultado = disjuntos(conjunto_a, conjunto_b)
+            elif operacion == "cardinalidad":
+                resultado = cardinalidad(conjunto_a, conjunto_b)
             elif operacion == "Ver como diagrama de venn":
                 dibujar_venn(conjunto_a, conjunto_b)
 
