@@ -24,6 +24,20 @@ def union( conjunto_a, set_b):
 
     return union
 
+#metodo que calcula el complemento de cada conjunto
+def complemento( conjunto_a, conjunto_b):
+    mensaje = "El complemento de A es: " + str(conjunto_b) + " y el complemento de B es: " + str(conjunto_a)
+    return mensaje
+
+#metodo que calcula la combinacion de cada conjunto
+def combinacion( conjunto_a, conjunto_b):
+    combinacion = []
+    for i in conjunto_a:
+        for j in conjunto_b:
+            combinacion.append((i,j))
+    return combinacion
+
+
 
 def interseccion( conjunto_a, set_b):
     interseccion = []
@@ -105,7 +119,7 @@ class ConjuntosApp:
         self.entry_conjunto_b.grid(row=1, column=1, padx=5, pady=5)
 
         # Menú desplegable para seleccionar la operación
-        opciones_operaciones = ["Unión", "Intersección", "Diferencia A-B", "Diferencia B-A", "subconjuntos", "disjuntos", "cardinalidad" ,"Ver como diagrama de venn"]
+        opciones_operaciones = ["Unión", "Intersección", "Diferencia A-B", "Diferencia B-A", "subconjuntos", "disjuntos", "cardinalidad", "complemento", "combinacion" ,"Ver como diagrama de venn"]
         self.operacion_var = tk.StringVar(root)
         self.operacion_var.set(opciones_operaciones[0])  # Configurar la opción predeterminada
         self.menu_operacion = tk.OptionMenu(root, self.operacion_var, *opciones_operaciones)
@@ -146,6 +160,10 @@ class ConjuntosApp:
                 resultado = disjuntos(conjunto_a, conjunto_b)
             elif operacion == "cardinalidad":
                 resultado = cardinalidad(conjunto_a, conjunto_b)
+            elif operacion == "complemento":
+                resultado = complemento(conjunto_a, conjunto_b)
+            elif operacion == "combinacion":
+                resultado = combinacion(conjunto_a, conjunto_b)
             elif operacion == "Ver como diagrama de venn":
                 dibujar_venn(conjunto_a, conjunto_b)
 
