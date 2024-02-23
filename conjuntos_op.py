@@ -1,7 +1,8 @@
 import tkinter as tk
-
 from tkinter import messagebox
-
+from matplotlib_venn import venn2, venn2_circles
+import matplotlib.pyplot as plt
+from sympy import FiniteSet
 
 
 
@@ -59,6 +60,19 @@ def diferencia( conjunto_a, conjunto_b ):
 
     return diferencia
 
+def dibujar_venn(conjunto_a, conjunto_b):
+    A = FiniteSet(1, 3, 5, 7, 9, 11, 13, 15, 17, 19)
+    B = FiniteSet(2, 3, 5, 7, 11, 13, 17, 19, 8)
+
+    plt.figure(figsize=(6, 8))
+    v = venn2(subsets=[A, B], set_labels=('A', 'B'))
+    v.get_label_by_id('10').set_text(A - B)
+    v.get_label_by_id('11').set_text(A.intersection(B))
+    v.get_label_by_id('01').set_text(B - A)
+    c = venn2_circles(subsets=[A, B], linestyle='dashed')
+    c[0].set_ls('solid')
+    plt.show()
+
 class ConjuntosApp:
     def __init__(self, root):
         self.root = root
@@ -81,7 +95,7 @@ class ConjuntosApp:
         self.entry_conjunto_b.grid(row=1, column=1, padx=5, pady=5)
 
         # Menú desplegable para seleccionar la operación
-        opciones_operaciones = ["Unión", "Intersección", "Diferencia A-B", "Diferencia B-A"]
+        opciones_operaciones = ["Unión", "Intersección", "Diferencia A-B", "Diferencia B-A", "Ver como diagrama de venn"]
         self.operacion_var = tk.StringVar(root)
         self.operacion_var.set(opciones_operaciones[0])  # Configurar la opción predeterminada
         self.menu_operacion = tk.OptionMenu(root, self.operacion_var, *opciones_operaciones)
@@ -104,6 +118,7 @@ class ConjuntosApp:
     def realizar_operacion(self):
         conjunto_a, conjunto_b = self.obtener_conjuntos_ingresados()
 
+        resultado = None
         if conjunto_a is not None and conjunto_b is not None:
             operacion = self.operacion_var.get()
 
@@ -115,8 +130,12 @@ class ConjuntosApp:
                 resultado = diferencia( conjunto_a, conjunto_b)
             elif operacion == "Diferencia B-A":
                 resultado = diferencia(conjunto_a, conjunto_b)
+            elif operacion == "Ver como diagrama de venn":
+                dibujar_venn(conjunto_a, conjunto_b)
 
-            messagebox.showinfo("Resultado", f"Resultado de {operacion}: {resultado}")
+            if resultado != None:
+                messagebox.showinfo("Resultado", f"Resultado de {operacion}: {resultado}")
+
 
 if __name__ == "__main__":
     root = tk.Tk()
