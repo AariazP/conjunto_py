@@ -1,3 +1,4 @@
+#importacion de librerias
 import tkinter as tk
 from tkinter import messagebox
 from matplotlib_venn import venn2, venn2_circles
@@ -5,7 +6,7 @@ import matplotlib.pyplot as plt
 from sympy import FiniteSet
 
 
-
+#funcion para hallar la union de 2 conjuntos
 def union( conjunto_a, set_b):
     union = []
     for elmnt in conjunto_a:
@@ -38,7 +39,7 @@ def combinacion( conjunto_a, conjunto_b):
     return combinacion
 
 
-
+#metodo que calcula la interseccion entre conjuntos
 def interseccion( conjunto_a, set_b):
     interseccion = []
     for elmnt in conjunto_a:
@@ -47,12 +48,13 @@ def interseccion( conjunto_a, set_b):
 
     return interseccion
 
-
+#metodos que halla todos los posibles subconjuntos de cada conjunto
 def subconjunto( conjunto_a, conjunto_b ):
     subconjuntos_a = subconjuntos(conjunto_a)
     subconjuntos_b = subconjuntos(conjunto_b)
     return "Los subconjuntos de A son: " + str(subconjuntos_a) + " y los subconjuntos de B son: " + str(subconjuntos_b)
 
+#metodo que halla los subconjuntos de un conjunto determinado
 def subconjuntos(conjunto):
     if len(conjunto) == 0:
         return [[]]
@@ -60,7 +62,7 @@ def subconjuntos(conjunto):
     return sub + [s + [conjunto[-1]] for s in sub]   
 
 
-
+#determina si dos conjuntos son disjuntos
 def disjuntos( conjunto_a, conjunto2):
         for i in conjunto_a:
             for j in conjunto2:
@@ -68,6 +70,7 @@ def disjuntos( conjunto_a, conjunto2):
                     return "Los conjuntos no son disjuntos"
         return "Los conjuntos son disjuntos"
 
+#halla la diferencia entre conjuntos
 def diferencia( conjunto_a, conjunto_b ):
     diferencia = []
     for i in conjunto_a:
@@ -79,24 +82,32 @@ def diferencia( conjunto_a, conjunto_b ):
 
     return diferencia
 
+#halla la cardinalidad ( tamaño ) de un conjunto
 def cardinalidad( conjunto_a, conjunto_b):
     return "La cardinalidad del conjunto A es: " + str(len(conjunto_a)) + " y la cardinalidad del conjunto B es: " + str(len(conjunto_b)) 
 
+
+#crea el digrama de venn
 def dibujar_venn(conjunto_a, conjunto_b):
     #agregar los conjuntos a un objeto de tipo FiniteSet
 
     A = FiniteSet(*conjunto_a)
     B = FiniteSet(*conjunto_b)
 
+
     plt.figure(figsize=(6, 8))
     v = venn2(subsets=[A, B], set_labels=('A', 'B'))
     v.get_label_by_id('10').set_text(A - B)
-    v.get_label_by_id('11').set_text(A.intersection(B))
+    try:
+        v.get_label_by_id('11').set_text( A.intersection(B) )
+    except:
+        pass
     v.get_label_by_id('01').set_text(B - A)
     c = venn2_circles(subsets=[A, B], linestyle='dashed')
     c[0].set_ls('solid')
     plt.show()
 
+#clase utilizada para inicializar la aplicacion
 class ConjuntosApp:
     def __init__(self, root):
         self.root = root
@@ -130,6 +141,7 @@ class ConjuntosApp:
         self.btn_calcular.grid(row=3, column=0, columnspan=2, pady=10)
 
     
+    #procesa los conjuntos ingresados
     def obtener_conjuntos_ingresados(self):
         try:
             conjunto_a = list(map(int, self.entry_conjunto_a.get().split(',') ))
@@ -139,6 +151,9 @@ class ConjuntosApp:
             messagebox.showerror("Error", "Ingrese conjuntos válidos (números separados por comas)")
             return None, None
 
+
+    #realiza la operacion especificada por el usuario, descritas en los
+    #bloques if else
     def realizar_operacion(self):
         conjunto_a, conjunto_b = self.obtener_conjuntos_ingresados()
 
@@ -171,6 +186,7 @@ class ConjuntosApp:
                 messagebox.showinfo("Resultado", f"Resultado de {operacion}: {resultado}")
 
 
+#punto de entrada de la app
 if __name__ == "__main__":
     root = tk.Tk()
     app = ConjuntosApp(root)
