@@ -27,7 +27,7 @@ def union( conjunto_a, set_b):
 
 #metodo que calcula el complemento de cada conjunto
 def complemento( conjunto_a, conjunto_b):
-    mensaje = "El complemento de A es: " + str(conjunto_b) + " y el complemento de B es: " + str(conjunto_a)
+    mensaje = "El complemento de A es: " + str(diferencia( conjunto_b, conjunto_a ) ) + " y el complemento de B es: " +  str(diferencia( conjunto_a, conjunto_b ) )
     return mensaje
 
 #metodo que calcula la combinacion de cada conjunto
@@ -75,7 +75,7 @@ def diferencia( conjunto_a, conjunto_b ):
     diferencia = []
     for i in conjunto_a:
         diferencia.append(i) 
-        for j in conjunto_b[:-1]:
+        for j in conjunto_b:
             if i == j:
                 diferencia.pop()
                 break
@@ -168,7 +168,7 @@ class ConjuntosApp:
             elif operacion == "Diferencia A-B":
                 resultado = diferencia( conjunto_a, conjunto_b)
             elif operacion == "Diferencia B-A":
-                resultado = diferencia(conjunto_a, conjunto_b)
+                resultado = diferencia(conjunto_b, conjunto_a)
             elif operacion == "subconjuntos":
                 resultado = subconjunto(conjunto_a, conjunto_b)
             elif operacion == "disjuntos":
